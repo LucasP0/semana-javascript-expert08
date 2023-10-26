@@ -3,6 +3,7 @@ import View from './view.js';
 const view = new View();
 const clock = new Clock()
 
+
 let took = ''
 view.configureOnFileChange(file => {
     clock.start((time) => {
@@ -20,12 +21,18 @@ view.configureOnFileChange(file => {
 
 async function fakeFetch() {
     const filePath = '/videos/frag_bunny.mp4'
-    const response = await fetch(filePath, {
-        method: "HEAD"
+    const response = await fetch(filePath)
+    const file = new File([await response.blob()], filePath, {
+        type: 'video/mp4',
+        lastModified: Date.now()
     })
-    // // traz o tamanho do arquivo:
-    // response.headers.get('content-length')
-    // debugger 
+    const event = new Event('change')
+    Reflect.defineProperty(
+        event,
+        'target',
+        { value: { files: [file] } }
+    )
+    document.getElementById('fileUpload').dispatchEvent(event)
 }
 fakeFetch()
 
