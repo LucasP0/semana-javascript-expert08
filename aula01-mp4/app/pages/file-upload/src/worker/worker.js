@@ -1,5 +1,43 @@
+import VideoProcessor from "./videoProcessor.js"
+
+
+const qvgaConstraints = {
+  width: 320,
+  height: 240
+}
+const vgaContraints = {
+  width: 640,
+  height: 480
+}
+const hdContraints = {
+  width: 1280,
+  height: 720
+}
+
+const encoderConfig = {
+  // webM
+  ...qvgaConstraints,
+  bitrate: 10e6,
+  codec: 'vp09.00.10.08',
+  pt: 4,
+  hardwareAcceleration: 'prefer-software',
+
+  // // mp4
+  // codec: 'avc1.42002A',
+  // pt: 1,
+  // hardwareAcceleration: 'prefer-hardware',
+  // avc: { format: 'annexb' }
+
+}
+
+const videoProcessor = new VideoProcessor()
+
 onmessage = ({ data }) => {
-  console.log('Recebido', data)
-  self.postMessage('Hey from worker!!!')
-  while(true) {}
+  // debugger
+  setTimeout(() => {
+    self.postMessage({
+      status: 'done'
+    })
+  }, 2000)
+
 }
